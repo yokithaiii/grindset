@@ -62,6 +62,10 @@ export async function signInWithTelegram(payload: { initData: string } | { widge
   const { data, error } = await supabase.functions.invoke<{ token_hash: string }>('telegram-auth', { body: payload })
   if (error || !data) {
     let message = error?.message ?? 'Нет ответа сервера'
+    // FunctionsFetchError: the request never got a readable response (not deployed, JWT check on, crash, network)
+    if (error?.name === 'FunctionsFetchError') {
+      message = 'Сервер входа недоступен: функция telegram-auth не задеплоена или требует JWT (нужен --no-verify-jwt)'
+    }
     // FunctionsHttpError carries the response; our function returns { error }
     const res = (error as { context?: Response } | null)?.context
     if (res && typeof res.json === 'function') {

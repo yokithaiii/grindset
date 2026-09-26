@@ -1,0 +1,6 @@
+project_id = "grindset"
+
+# The caller is not signed in yet, so the gateway must not require a user JWT.
+# The function verifies the Telegram signature itself.
+[functions.telegram-auth]
+verify_jwt = false
