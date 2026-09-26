@@ -35,7 +35,7 @@ export function EntryDialogProvider({ children }: { children: ReactNode }) {
     <EntryDialogContext.Provider value={value}>
       {children}
       <Dialog open={state.open} onOpenChange={(o) => setState((s) => ({ ...s, open: o }))}>
-        <DialogContent className="top-4 translate-y-0 gap-5 sm:top-[50%] sm:max-w-md sm:translate-y-[-50%]">
+        <DialogContent className="pb-0 sm:max-w-md sm:pb-0">
           {/* key: fresh form state every time the dialog opens */}
           <EntryForm key={state.key} entry={state.entry} onDone={() => setState((s) => ({ ...s, open: false }))} />
         </DialogContent>
@@ -133,7 +133,7 @@ function EntryForm({ entry, onDone }: { entry?: Entry; onDone: () => void }) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="grid gap-5">
+    <form onSubmit={onSubmit} className="grid gap-4 sm:gap-5">
       <DialogHeader>
         <DialogTitle>{entry ? 'Изменить запись' : 'Новая запись'}</DialogTitle>
         <DialogDescription className="sr-only">Сумма, источник и дата заработка</DialogDescription>
@@ -152,7 +152,8 @@ function EntryForm({ entry, onDone }: { entry?: Entry; onDone: () => void }) {
           inputMode="decimal"
           autoComplete="off"
           placeholder="0"
-          className="num h-14 text-3xl font-semibold md:text-3xl"
+          enterKeyHint="done"
+          className="num h-14 text-3xl font-semibold pointer-coarse:h-14 md:pointer-fine:text-3xl"
           aria-invalid={!!formState.errors.amount}
           {...register('amount')}
         />
@@ -170,7 +171,7 @@ function EntryForm({ entry, onDone }: { entry?: Entry; onDone: () => void }) {
               aria-checked={sourceId === s.id}
               onClick={() => setValue('source_id', s.id, { shouldValidate: true })}
               className={cn(
-                'flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition-colors',
+                'flex min-h-9 items-center gap-2 rounded-full border px-3 text-sm transition-colors select-none pointer-coarse:min-h-10',
                 sourceId === s.id
                   ? 'border-foreground/60 bg-accent font-medium'
                   : 'text-muted-foreground hover:bg-accent/60',
@@ -202,27 +203,27 @@ function EntryForm({ entry, onDone }: { entry?: Entry; onDone: () => void }) {
               {label}
             </Button>
           ))}
-          <Input id="date" type="date" max={today} className="h-8 flex-1" {...register('date')} />
+          <Input id="date" type="date" max={today} className="h-8 min-w-0 flex-1 pointer-coarse:h-10" {...register('date')} />
         </div>
       </div>
 
       <Collapsible open={extraOpen} onOpenChange={setExtraOpen}>
         <CollapsibleTrigger asChild>
-          <button type="button" className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+          <button type="button" className="flex min-h-9 items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
             <ChevronDown className={cn('size-4 transition-transform', extraOpen && 'rotate-180')} />
             Время и заметка
           </button>
         </CollapsibleTrigger>
-        <CollapsibleContent className="mt-3 grid gap-4">
+        <CollapsibleContent className="mt-2 grid gap-4">
           <div className="grid gap-2">
             <Label htmlFor="minutes">Сколько времени заняло, мин</Label>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <Input
                 id="minutes"
                 inputMode="numeric"
                 autoComplete="off"
                 placeholder="—"
-                className="num w-24"
+                className="num w-20"
                 {...register('minutes')}
               />
               {QUICK_MINUTES.map((m) => (
@@ -242,13 +243,14 @@ function EntryForm({ entry, onDone }: { entry?: Entry; onDone: () => void }) {
           </div>
           <div className="grid gap-2">
             <Label htmlFor="note">Заметка</Label>
-            <Input id="note" autoComplete="off" placeholder="Например, заказ №42" {...register('note')} />
+            <Input id="note" autoComplete="off" enterKeyHint="done" placeholder="Например, заказ №42" {...register('note')} />
             {formState.errors.note && <p className="text-sm text-destructive">{formState.errors.note.message}</p>}
           </div>
         </CollapsibleContent>
       </Collapsible>
 
-      <div className="flex gap-2">
+      {/* sticky: stays reachable when the keyboard is open (iOS decimal pad has no Enter key) */}
+      <div className="sticky bottom-0 -mx-5 flex gap-2 bg-background px-5 pt-2 pb-5 sm:-mx-6 sm:px-6 sm:pb-6">
         {entry && (
           <Button
             type="button"

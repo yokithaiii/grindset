@@ -36,12 +36,12 @@ import { formatDate, formatMinutes, formatPercent, WEEKDAYS, WEEKDAYS_SHORT } fr
 import { addDaysISO } from '@/lib/dates'
 import { cn } from '@/lib/utils'
 
-const PERIODS: { value: PeriodKind; label: string }[] = [
+const PERIODS: { value: PeriodKind; label: string; short?: string }[] = [
   { value: 'week', label: 'Неделя' },
   { value: 'month', label: 'Месяц' },
   { value: 'quarter', label: 'Квартал' },
   { value: 'year', label: 'Год' },
-  { value: 'all', label: 'Всё время' },
+  { value: 'all', label: 'Всё время', short: 'Всё' },
 ]
 
 const PREV_LABEL: Record<PeriodKind, string> = {
@@ -157,21 +157,21 @@ export default function AnalyticsPage() {
 
   return (
     <>
-      <PageHeader
-        title="Аналитика"
-        actions={
-          <Tabs value={kind} onValueChange={(v) => setKind(v as PeriodKind)}>
-            <TabsList>
-              {PERIODS.map((p) => (
-                <TabsTrigger key={p.value} value={p.value} className="px-2.5 text-xs sm:text-sm">
-                  {p.label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
-        }
-        description={`${formatDate(period.from)} — ${formatDate(period.to)}`}
-      />
+      <PageHeader title="Аналитика" description={`${formatDate(period.from)} — ${formatDate(period.to)}`} />
+
+      {/* Period switch: full width and pinned under the header on phones */}
+      <div className="sticky top-[calc(3rem+var(--safe-top))] z-20 -mx-3 mb-3 bg-background/95 px-3 pb-2 backdrop-blur sm:-mx-4 sm:px-4 md:static md:mx-0 md:mb-4 md:bg-transparent md:p-0 md:backdrop-blur-none">
+        <Tabs value={kind} onValueChange={(v) => setKind(v as PeriodKind)}>
+          <TabsList className="w-full md:w-fit pointer-coarse:group-data-[orientation=horizontal]/tabs:h-10">
+            {PERIODS.map((p) => (
+              <TabsTrigger key={p.value} value={p.value} className="px-2 text-xs sm:px-3 sm:text-sm">
+                <span className="sm:hidden">{p.short ?? p.label}</span>
+                <span className="hidden sm:inline">{p.label}</span>
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+      </div>
 
       {data.scoped.length === 0 ? (
         <Card>
@@ -180,8 +180,8 @@ export default function AnalyticsPage() {
           </EmptyState>
         </Card>
       ) : (
-        <div className="grid gap-4">
-          <Card className="grid grid-cols-2 gap-5 px-5 py-5 sm:grid-cols-3 lg:grid-cols-5">
+        <div className="grid gap-3 sm:gap-4">
+          <Card className="grid grid-cols-2 gap-x-4 gap-y-4 px-4 py-4 sm:grid-cols-3 sm:gap-5 sm:px-5 sm:py-5 lg:grid-cols-5">
             <Metric
               label="Заработано"
               value={money(data.stats.total)}
@@ -202,7 +202,7 @@ export default function AnalyticsPage() {
           </Card>
 
           <Section title={period.bucket === 'day' ? 'По дням' : period.bucket === 'week' ? 'По неделям' : 'По месяцам'}>
-            <div className="h-64">
+            <div className="h-56 sm:h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data.series} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
                   <CartesianGrid vertical={false} stroke="var(--border)" />
@@ -243,7 +243,7 @@ export default function AnalyticsPage() {
             {stackSources.length > 1 && <Legend items={stackSources.map((s) => ({ label: s.name, color: s.color }))} />}
           </Section>
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
             <Section
               title="Источники"
               action={
@@ -308,7 +308,7 @@ export default function AnalyticsPage() {
           <Section title="Активный и пассивный доход, накопительно">
             {hasPassive ? (
               <>
-                <div className="h-56">
+                <div className="h-48 sm:h-56">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={data.cumulative} margin={{ top: 4, right: 8, bottom: 0, left: 0 }}>
                       <CartesianGrid vertical={false} stroke="var(--border)" />
@@ -353,7 +353,7 @@ export default function AnalyticsPage() {
                     <TableHead className="pl-0">Источник</TableHead>
                     <TableHead className="text-right">Ставка</TableHead>
                     <TableHead className="text-right">Часы</TableHead>
-                    <TableHead className="pr-0 text-right">Сумма</TableHead>
+                    <TableHead className="hidden pr-0 text-right sm:table-cell">Сумма</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -369,7 +369,7 @@ export default function AnalyticsPage() {
                         </TableCell>
                         <TableCell className="num text-right font-medium">{money(h.rate)}/ч</TableCell>
                         <TableCell className="num text-right text-muted-foreground">{formatMinutes(h.minutes)}</TableCell>
-                        <TableCell className="num pr-0 text-right text-muted-foreground">{money(h.amount)}</TableCell>
+                        <TableCell className="num hidden pr-0 text-right text-muted-foreground sm:table-cell">{money(h.amount)}</TableCell>
                       </TableRow>
                     )
                   })}

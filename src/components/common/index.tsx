@@ -5,12 +5,12 @@ import { cn } from '@/lib/utils'
 
 export function PageHeader({ title, description, actions }: { title: string; description?: ReactNode; actions?: ReactNode }) {
   return (
-    <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+    <div className="mb-4 flex items-end justify-between gap-3 md:mb-6">
+      <div className="min-w-0">
+        <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">{title}</h1>
         {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}
       </div>
-      {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
+      {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
     </div>
   )
 }
@@ -27,12 +27,12 @@ export function Section({
   className?: string
 }) {
   return (
-    <Card className={cn('gap-4 py-5', className)}>
-      <div className="flex items-center justify-between gap-2 px-5">
+    <Card className={cn('gap-3 py-4 sm:gap-4 sm:py-5', className)}>
+      <div className="flex min-h-6 items-center justify-between gap-2 px-4 sm:px-5">
         <h2 className="text-sm font-medium text-muted-foreground">{title}</h2>
         {action}
       </div>
-      <CardContent className="px-5">{children}</CardContent>
+      <CardContent className="px-4 sm:px-5">{children}</CardContent>
     </Card>
   )
 }

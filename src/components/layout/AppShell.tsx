@@ -34,10 +34,10 @@ export function AppShell() {
 
   return (
     <div className="min-h-dvh">
-      <header className="sticky top-0 z-30 border-b bg-background/85 backdrop-blur">
-        <div className="mx-auto flex h-14 max-w-5xl items-center gap-6 px-4">
+      <header className="sticky top-0 z-30 border-b bg-background/85 pt-[var(--safe-top)] backdrop-blur">
+        <div className="mx-auto flex h-12 max-w-5xl items-center gap-6 px-4 md:h-14">
           <NavLink to="/" className="flex items-center gap-2 font-semibold tracking-tight">
-            <img src="/favicon.svg" alt="" className="size-6" />
+            <img src="/logo.png" alt="" className="size-7 rounded-md" />
             grindset
           </NavLink>
           <nav className="hidden items-center gap-1 md:flex">
@@ -66,7 +66,7 @@ export function AppShell() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-4 pt-6 pb-32 md:pb-12">
+      <main className="mx-auto max-w-5xl px-3 pt-4 pb-[calc(8.5rem+var(--safe-bottom))] sm:px-4 md:pt-6 md:pb-12">
         <Outlet />
       </main>
 
@@ -75,11 +75,11 @@ export function AppShell() {
         onClick={() => open()}
         size="icon-lg"
         aria-label="Добавить запись"
-        className="fixed right-4 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-40 size-14 rounded-full shadow-lg md:hidden [&_svg:not([class*='size-'])]:size-6"
+        className="fixed right-4 bottom-[calc(4.75rem+var(--safe-bottom))] z-40 size-14 rounded-full shadow-lg md:hidden pointer-coarse:size-14 [&_svg:not([class*='size-'])]:size-6"
       >
         <Plus />
       </Button>
-      <nav className="fixed inset-x-0 bottom-0 z-30 border-t bg-background/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-30 border-t bg-background/95 pb-[var(--safe-bottom)] backdrop-blur md:hidden">
         <div className="grid grid-cols-5">
           {NAV.map(({ to, label, icon: Icon }) => (
             <NavLink
@@ -88,13 +88,19 @@ export function AppShell() {
               end={to === '/'}
               className={({ isActive }) =>
                 cn(
-                  'flex flex-col items-center gap-0.5 py-2 text-[11px]',
-                  isActive ? 'text-foreground' : 'text-muted-foreground',
+                  'flex min-h-14 flex-col items-center justify-center gap-1 text-[10px] leading-none select-none',
+                  isActive ? 'font-medium text-foreground' : 'text-muted-foreground',
                 )
               }
             >
-              <Icon className="size-5" />
-              {label}
+              {({ isActive }) => (
+                <>
+                  <span className={cn('flex h-7 w-12 items-center justify-center rounded-full transition-colors', isActive && 'bg-accent')}>
+                    <Icon className="size-5" strokeWidth={isActive ? 2.25 : 1.75} />
+                  </span>
+                  {label}
+                </>
+              )}
             </NavLink>
           ))}
         </div>

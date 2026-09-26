@@ -91,7 +91,7 @@ function SourceForm({ source, onDone, usedColors }: { source?: Source; onDone: (
               aria-label={c}
               onClick={() => setValue('color', c)}
               className={cn(
-                'size-7 rounded-full ring-offset-2 ring-offset-background',
+                'size-8 rounded-full ring-offset-2 ring-offset-background pointer-coarse:size-9',
                 color.toLowerCase() === c && 'ring-2 ring-foreground',
               )}
               style={{ background: c }}
@@ -101,7 +101,7 @@ function SourceForm({ source, onDone, usedColors }: { source?: Source; onDone: (
             type="color"
             value={color}
             onChange={(e) => setValue('color', e.target.value)}
-            className="size-7 cursor-pointer rounded-full border bg-transparent"
+            className="size-8 cursor-pointer rounded-full border bg-transparent pointer-coarse:size-9"
             aria-label="Свой цвет"
           />
         </div>

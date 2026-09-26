@@ -40,7 +40,13 @@ export function YearHeatmap({ heatmap, today }: { heatmap: Heatmap; today: strin
   return (
     <div>
       <div className="relative">
-        <div ref={scrollRef} className="overflow-x-auto pb-1" onMouseLeave={() => setHover(null)}>
+        <div
+          ref={scrollRef}
+          className="overflow-x-auto overscroll-x-contain pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          onMouseLeave={() => setHover(null)}
+          // on touch the tooltip opens by tap; scrolling the grid closes it
+          onScroll={() => setHover(null)}
+        >
           <div className="inline-grid min-w-max gap-x-2" style={{ gridTemplateColumns: 'auto auto' }}>
             <div />
             <div className="relative h-4 text-[10px] text-muted-foreground">

@@ -22,7 +22,7 @@ export function MonthCard({
   return (
     <Section title={<span className="capitalize">{formatDate(today, 'LLLL yyyy')}</span>}>
       <div className="flex flex-wrap items-baseline gap-x-2">
-        <span className="num text-3xl font-semibold tracking-tight">{money(forecast.earned)}</span>
+        <span className="num text-2xl font-semibold tracking-tight sm:text-3xl">{money(forecast.earned)}</span>
         {goalAmount ? (
           <span className="num text-muted-foreground">из {money(goalAmount)}</span>
         ) : (
@@ -33,7 +33,7 @@ export function MonthCard({
       </div>
       {goalAmount ? <Progress value={progress * 100} className="mt-3 h-2" /> : null}
 
-      <div className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-3">
+      <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 sm:mt-5 sm:grid-cols-3">
         <Metric
           label="Прогноз на конец месяца"
           value={money(forecast.projected)}

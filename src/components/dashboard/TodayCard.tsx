@@ -20,12 +20,12 @@ export function TodayCard({
   const savingsToday = savings.filter((s) => s.progress.earnedToday > 0 && s.progress.progress < 1)
 
   return (
-    <Card className="gap-0 py-5">
-      <CardContent className="px-5">
+    <Card className="gap-0 py-4 sm:py-5">
+      <CardContent className="px-4 sm:px-5">
         <div className="text-sm font-medium text-muted-foreground">Сегодня</div>
-        <div className="num mt-1 text-5xl font-semibold tracking-tight">{money(earnedToday)}</div>
+        <div className="num mt-1 text-4xl font-semibold tracking-tight break-words sm:text-5xl">{money(earnedToday)}</div>
 
-        <div className="mt-5">
+        <div className="mt-4 sm:mt-5">
           {!target ? (
             <p className="text-sm text-muted-foreground">
               <Link to="/goals" className="text-foreground underline underline-offset-4">
@@ -49,7 +49,7 @@ export function TodayCard({
           ) : (
             <>
               <Progress value={target.todayProgress * 100} className="h-2" />
-              <div className="mt-2 flex justify-between gap-2 text-sm">
+              <div className="mt-2 flex flex-wrap justify-between gap-x-3 gap-y-1 text-sm">
                 <span className="text-muted-foreground">
                   Дневная цель <span className="num font-medium text-foreground">{money(target.perDay)}</span>
                 </span>

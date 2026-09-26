@@ -20,15 +20,15 @@ export function StreakCard({
   const applyFreezes = useApplyFreezes()
 
   return (
-    <Card className="gap-0 py-5">
-      <CardContent className="flex h-full flex-col px-5">
+    <Card className="gap-0 py-4 sm:py-5">
+      <CardContent className="flex h-full flex-col px-4 sm:px-5">
         <div className="text-sm font-medium text-muted-foreground">Серия</div>
         <div className="mt-1 flex items-baseline gap-2">
           <Flame
             className={cn('size-6 self-center', streak.current > 0 ? 'text-primary' : 'text-muted-foreground/50')}
             strokeWidth={1.75}
           />
-          <span className="num text-5xl font-semibold tracking-tight">{streak.current}</span>
+          <span className="num text-4xl font-semibold tracking-tight sm:text-5xl">{streak.current}</span>
           <span className="text-muted-foreground">{plural(streak.current, 'день', 'дня', 'дней')}</span>
         </div>
         <div className="mt-3 space-y-1 text-sm text-muted-foreground">

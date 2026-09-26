@@ -4,6 +4,14 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  /* Safe areas: notch / home indicator, plus Telegram Mini App insets when running inside Telegram
+     (telegram-web-app.js sets --tg-*; outside Telegram they fall back to 0). */
+  --safe-top: max(
+    env(safe-area-inset-top, 0px),
+    calc(var(--tg-safe-area-inset-top, 0px) + var(--tg-content-safe-area-inset-top, 0px))
+  );
+  --safe-bottom: max(env(safe-area-inset-bottom, 0px), var(--tg-safe-area-inset-bottom, 0px));
+
   --radius: 0.625rem;
   --background: oklch(0.985 0 0);
   --foreground: oklch(0.18 0 0);
@@ -96,9 +104,34 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  /* the page itself never scrolls sideways; wide blocks (heatmap) scroll inside their card.
+     clip (not hidden) keeps position: sticky working */
+  html,
+  body {
+    overflow-x: clip;
+  }
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "cv11", "ss01";
+    /* no pull-to-refresh / rubber band: feels like an app, required in Telegram */
+    overscroll-behavior-y: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* no double-tap zoom delay on controls */
+  a,
+  button,
+  input,
+  select,
+  textarea,
+  label,
+  [role="button"],
+  [role="radio"],
+  [role="tab"] {
+    touch-action: manipulation;
   }
   /* Money and metrics always use tabular figures */
   .num {

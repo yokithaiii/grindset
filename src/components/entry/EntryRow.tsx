@@ -12,7 +12,7 @@ export function EntryRow({ entry, source }: { entry: Entry; source?: Source }) {
     <button
       type="button"
       onClick={() => open(entry)}
-      className="flex w-full items-center gap-3 rounded-md px-2 py-2 text-left hover:bg-accent/60"
+      className="flex min-h-12 w-full items-center gap-3 rounded-md px-2.5 py-2 text-left select-none hover:bg-accent/60 active:bg-accent"
     >
       <SourceDot color={source?.color ?? '#999'} />
       <div className="min-w-0 flex-1">

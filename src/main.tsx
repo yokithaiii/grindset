@@ -17,7 +17,16 @@ const queryClient = new QueryClient({
 
 function ThemedToaster() {
   const { theme } = useTheme()
-  return <Toaster theme={theme} position="top-center" closeButton={false} toastOptions={{ duration: 2500 }} />
+  return (
+    <Toaster
+      theme={theme}
+      position="top-center"
+      closeButton={false}
+      // below the notch / Telegram header on phones
+      mobileOffset={{ top: 'calc(var(--safe-top) + 0.5rem)', left: '0.75rem', right: '0.75rem' }}
+      toastOptions={{ duration: 2500 }}
+    />
+  )
 }
 
 createRoot(document.getElementById('root')!).render(

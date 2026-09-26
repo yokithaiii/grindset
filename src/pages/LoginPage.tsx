@@ -31,7 +31,7 @@ export function LoginPage() {
       <Card className="w-full max-w-sm">
         <CardHeader>
           <div className="mb-2 flex items-center gap-2 font-semibold">
-            <img src="/favicon.svg" alt="" className="size-6" /> grindset
+            <img src="/logo.png" alt="" className="size-7 rounded-md" /> grindset
           </div>
           <CardTitle>Вход</CardTitle>
           <CardDescription>Пришлём ссылку для входа на почту — без пароля.</CardDescription>

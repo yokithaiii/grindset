@@ -25,7 +25,7 @@ export function DashboardPage() {
 
   if (stats.isPending) {
     return (
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-3">
         <Skeleton className="h-44 md:col-span-2" />
         <Skeleton className="h-44" />
         <Skeleton className="h-40 md:col-span-3" />
@@ -35,7 +35,7 @@ export function DashboardPage() {
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-3">
+    <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-3">
       <div className="md:col-span-2">
         <TodayCard earnedToday={stats.earnedToday} target={stats.target} savings={stats.savings} />
       </div>

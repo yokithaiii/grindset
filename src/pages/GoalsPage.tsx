@@ -90,11 +90,11 @@ function MonthlyGoalSection() {
         </p>
       )}
 
-      <form onSubmit={submit} className="mt-4 grid gap-2 sm:grid-cols-[auto_1fr_auto] sm:items-end">
+      <form onSubmit={submit} className="mt-4 grid grid-cols-2 items-end gap-2 sm:grid-cols-[auto_1fr_auto]">
         <div className="grid gap-1.5">
           <Label>С месяца</Label>
           <Select value={month} onValueChange={setMonth}>
-            <SelectTrigger className="w-full capitalize sm:w-44">
+            <SelectTrigger className="w-full min-w-0 capitalize sm:w-44">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -118,7 +118,7 @@ function MonthlyGoalSection() {
             className="num"
           />
         </div>
-        <Button type="submit" disabled={setGoals.isPending}>
+        <Button type="submit" disabled={setGoals.isPending} className="col-span-2 sm:col-span-1">
           Сохранить
         </Button>
       </form>
@@ -141,10 +141,10 @@ function MonthlyGoalSection() {
             {history.map((h) => {
               const pct = h.target ? h.earned / h.target : null
               return (
-                <div key={h.month} className="grid grid-cols-[6.5rem_1fr_auto] items-center gap-3 text-sm">
+                <div key={h.month} className="grid grid-cols-[1fr_auto] items-center gap-x-3 gap-y-1.5 text-sm sm:grid-cols-[6.5rem_1fr_auto]">
                   <span className="text-muted-foreground capitalize">{formatDate(h.month, 'LLL yyyy')}</span>
-                  <Progress value={pct === null ? 0 : Math.min(100, pct * 100)} className="h-1.5" />
-                  <span className="num w-36 text-right">
+                  <Progress value={pct === null ? 0 : Math.min(100, pct * 100)} className="order-last col-span-2 h-1.5 sm:order-none sm:col-span-1" />
+                  <span className="num text-right sm:w-36">
                     {money(h.earned)}
                     {h.target !== null && (
                       <span className="text-muted-foreground"> / {money(h.target, { compact: true })}</span>

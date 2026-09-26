@@ -15,8 +15,8 @@ const CURRENCIES = ['EUR', 'USD', 'GBP', 'CHF', 'PLN', 'CZK', 'RUB', 'UAH', 'KZT
 
 function Row({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
   return (
-    <div className="flex items-center justify-between gap-4 py-3">
-      <div>
+    <div className="flex items-center justify-between gap-3 py-3">
+      <div className="min-w-0">
         <div className="text-sm font-medium">{label}</div>
         {hint && <div className="text-xs text-muted-foreground">{hint}</div>}
       </div>
@@ -29,7 +29,7 @@ function Choice<T extends string>({
   value,
   onChange,
   options,
-  className = 'w-40',
+  className = 'w-36 sm:w-40',
 }: {
   value: T
   onChange: (v: T) => void
