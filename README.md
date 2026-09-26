@@ -26,12 +26,17 @@
 (посмотреть адреса: `ip -4 addr`).
 
 1. DNS: A-запись `grindset.kloai.ru` → этот второй IP.
-2. Сертификат: положить `ssl/crt.txt` (сертификат + цепочка) и `ssl/key.txt` (ключ) в корень проекта.
-3. `.env` (скопировать из `.env.example`): `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `BIND_IP`.
-4. Запуск и обновление:
+2. `.env` (скопировать из `.env.example`): `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `BIND_IP`.
+3. Сборка: `docker compose build`
+4. Сертификат Let's Encrypt (certbot слушает порт 80 только на `BIND_IP`, сертификаты kloai не трогает;
+   файлы кладутся в `ssl/crt.txt` и `ssl/key.txt`, контейнер запускается автоматически):
    ```bash
-   docker compose up -d --build
+   sudo apt install -y certbot
+   sudo bash scripts/issue-cert.sh you@example.com --dry-run   # тест
+   sudo bash scripts/issue-cert.sh you@example.com             # настоящий
    ```
+   Продление автоматическое (`certbot.timer`), проверка: `sudo certbot renew --cert-name grindset.kloai.ru --dry-run`.
+   Обновление приложения: `docker compose up -d --build`.
 5. Supabase → Authentication → URL Configuration: `https://grindset.kloai.ru` в Site URL и Redirect URLs —
    иначе ссылка из письма не вернёт в приложение.
 
