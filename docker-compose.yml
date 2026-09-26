@@ -1,0 +1,20 @@
+# grindset — static SPA with its own nginx + HTTPS for grindset.kloai.ru.
+# Data lives in Supabase (cloud); no database here. Independent of other projects.
+#
+# BIND_IP must be a server IP whose ports 80/443 are free
+# (kloai's nginx already occupies them on 217.114.0.208).
+
+services:
+  grindset:
+    build:
+      context: .
+      args:
+        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL:?set VITE_SUPABASE_URL in .env}
+        VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY:?set VITE_SUPABASE_ANON_KEY in .env}
+    container_name: grindset
+    ports:
+      - "${BIND_IP:?set BIND_IP in .env}:80:80"
+      - "${BIND_IP}:443:443"
+    volumes:
+      - ./ssl:/etc/nginx/ssl:ro
+    restart: unless-stopped

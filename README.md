@@ -18,6 +18,26 @@
 
 При первом входе автоматически создаются настройки и три источника по умолчанию.
 
+## Деплой (https://grindset.kloai.ru)
+
+Проект полностью самостоятельный: один контейнер, внутри nginx со статикой и HTTPS. Данные — в Supabase.
+
+Порты 80/443 на `217.114.0.208` заняты nginx kloai, поэтому grindset слушает **другой IP сервера**
+(посмотреть адреса: `ip -4 addr`).
+
+1. DNS: A-запись `grindset.kloai.ru` → этот второй IP.
+2. Сертификат: положить `ssl/crt.txt` (сертификат + цепочка) и `ssl/key.txt` (ключ) в корень проекта.
+3. `.env` (скопировать из `.env.example`): `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `BIND_IP`.
+4. Запуск и обновление:
+   ```bash
+   docker compose up -d --build
+   ```
+5. Supabase → Authentication → URL Configuration: `https://grindset.kloai.ru` в Site URL и Redirect URLs —
+   иначе ссылка из письма не вернёт в приложение.
+
+Ключи Supabase вшиваются при сборке, поэтому после их изменения нужен `--build`.
+После замены сертификата достаточно `docker compose restart`.
+
 ## Команды
 
 - `npm run dev` — dev-сервер
