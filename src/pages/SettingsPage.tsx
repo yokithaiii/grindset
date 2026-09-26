@@ -9,6 +9,7 @@ import { useSettings, useUpdateSettings } from '@/hooks/useSettings'
 import { useAuth } from '@/hooks/useAuth'
 import { useTheme, type Theme } from '@/hooks/useTheme'
 import { supabase } from '@/lib/supabase'
+import { isTelegram } from '@/lib/telegram'
 import type { AmountMode, WeekStart } from '@/lib/types'
 
 const CURRENCIES = ['EUR', 'USD', 'GBP', 'CHF', 'PLN', 'CZK', 'RUB', 'UAH', 'KZT', 'GEL', 'TRY', 'RSD', 'AED']
@@ -57,6 +58,12 @@ export function SettingsPage() {
   const update = useUpdateSettings()
   const { theme, setTheme } = useTheme()
   const { session } = useAuth()
+  const meta = session?.user.user_metadata ?? {}
+  const accountLabel = meta.telegram_username
+    ? `Telegram: @${meta.telegram_username}`
+    : meta.full_name
+      ? `Telegram: ${meta.full_name}`
+      : session?.user.email
   const { hash } = useLocation()
 
   useEffect(() => {
@@ -65,7 +72,7 @@ export function SettingsPage() {
 
   return (
     <>
-      <PageHeader title="Настройки" description={session?.user.email} />
+      <PageHeader title="Настройки" description={accountLabel} />
       <div className="grid gap-4">
         <Section title="Общие">
           <div className="divide-y">
@@ -122,11 +129,14 @@ export function SettingsPage() {
 
         <SourcesManager />
 
-        <div>
-          <Button variant="ghost" onClick={() => supabase.auth.signOut()}>
-            <LogOut /> Выйти
-          </Button>
-        </div>
+        {/* inside Telegram the app signs in automatically again, so there is nothing to sign out to */}
+        {!isTelegram && (
+          <div>
+            <Button variant="ghost" onClick={() => supabase.auth.signOut()}>
+              <LogOut /> Выйти
+            </Button>
+          </div>
+        )}
       </div>
     </>
   )

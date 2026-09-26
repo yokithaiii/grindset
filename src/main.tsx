@@ -6,6 +6,7 @@ import { Toaster } from 'sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { AuthProvider } from '@/hooks/useAuth'
 import { ThemeProvider, useTheme } from '@/hooks/useTheme'
+import { initTelegram } from '@/lib/telegram'
 import { App } from './App'
 import './index.css'
 
@@ -28,6 +29,8 @@ function ThemedToaster() {
     />
   )
 }
+
+initTelegram()
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

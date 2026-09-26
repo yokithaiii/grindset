@@ -8,10 +8,25 @@
     <meta name="theme-color" content="#0a0a0a" />
     <title>grindset</title>
     <script>
+      // Telegram Mini App SDK — only when launched from Telegram (launch params in the hash,
+      // or saved by the SDK for reloads). The regular web version doesn't depend on telegram.org.
       (function () {
-        var t = localStorage.getItem('theme') || 'system';
-        var dark = t === 'dark' || (t === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
-        document.documentElement.classList.toggle('dark', dark);
+        var inTelegram = /tgWebAppData=/.test(location.hash);
+        try {
+          inTelegram = inTelegram || !!sessionStorage.getItem('__telegram__initParams');
+        } catch (e) {}
+        if (inTelegram) document.write('<script src="https://telegram.org/js/telegram-web-app.js?59"><\/script>');
+      })();
+    </script>
+    <script>
+      (function () {
+        var t = 'system';
+        try {
+          t = localStorage.getItem('theme') || 'system';
+        } catch (e) {}
+        var app = window.Telegram && window.Telegram.WebApp;
+        var systemDark = app && app.initData ? app.colorScheme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.classList.toggle('dark', t === 'dark' || (t === 'system' && systemDark));
       })();
     </script>
   </head>
